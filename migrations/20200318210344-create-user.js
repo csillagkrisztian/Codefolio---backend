@@ -23,11 +23,16 @@ module.exports = {
       },
       githubLink: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
+      linkedinLink: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+
       userImg: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
