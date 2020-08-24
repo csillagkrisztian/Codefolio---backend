@@ -12,7 +12,6 @@ module.exports = (sequelize, DataTypes) => {
       user.hasMany(models.project);
       user.hasMany(models.like);
       user.hasMany(models.comment);
-
     }
   }
   user.init(
@@ -34,10 +33,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      linkedinLink: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       userImg: {
         type: DataTypes.STRING,
-        allowNull: false
-      }
+        allowNull: false,
+      },
     },
     {
       sequelize,
