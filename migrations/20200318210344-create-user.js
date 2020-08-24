@@ -21,6 +21,14 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      githubLink: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      userImg: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

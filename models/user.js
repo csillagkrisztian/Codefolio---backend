@@ -27,6 +27,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      githubLink: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      userImg: {
+        type: DataTypes.STRING,
+        allowNull: false
+      }
     },
     {
       sequelize,
