@@ -30,15 +30,15 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       githubLink: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
       },
       linkedinLink: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
       },
       userImg: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
       },
     },
