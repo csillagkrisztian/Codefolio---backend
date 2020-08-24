@@ -10,7 +10,14 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      project.belongsTo(models.user);
+      project.hasMany(models.resource);
+      project.hasMany(models.comment);
+      project.hasMany(models.like);
+      project.belongsToMany(models.tag, {
+        through: "tagproject",
+        foreignKey: "projectId",
+      });
     }
   };
   project.init({
@@ -20,7 +27,15 @@ module.exports = (sequelize, DataTypes) => {
     projectImg: DataTypes.STRING,
     ytUrl: DataTypes.STRING,
     projectDesc: DataTypes.STRING,
-    userId: DataTypes.INTEGER
+    userId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "users",
+        key: "id"
+      },
+      onUpdate: "CASCADE",
+      onDelete: "SET NULL",
+    }
   }, {
     sequelize,
     modelName: 'project',

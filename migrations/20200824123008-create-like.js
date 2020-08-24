@@ -9,10 +9,22 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       projectId: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER,
+        references: {
+          model: "projects",
+          key: "id"
+        },
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL",
       },
       userId: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER,
+        references: {
+          model: "users",
+          key: "id"
+        },
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL",
       },
       createdAt: {
         allowNull: false,
