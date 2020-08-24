@@ -35,8 +35,15 @@ router.post("/login", async (req, res, next) => {
 });
 
 router.post("/signup", async (req, res) => {
-  const { email, password, name, githubLink, userImg } = req.body;
-  if (!email || !password || !name || !githubLink || !userImg) {
+  const { email, password, name, githubLink, linkedinLink, userImg } = req.body;
+  if (
+    !email ||
+    !password ||
+    !name ||
+    !githubLink ||
+    !userImg ||
+    !linkedinLink
+  ) {
     return res.status(400).send("Please fill the form completely");
   }
 
@@ -46,6 +53,7 @@ router.post("/signup", async (req, res) => {
       password: bcrypt.hashSync(password, SALT_ROUNDS),
       name,
       githubLink,
+      linkedinLink,
       userImg,
     });
 
