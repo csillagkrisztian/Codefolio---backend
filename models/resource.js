@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      resource.belongsTo(models.project)
     }
   };
   resource.init({
@@ -18,7 +18,15 @@ module.exports = (sequelize, DataTypes) => {
     link: DataTypes.STRING,
     recourseImg: DataTypes.STRING,
     resourceDes: DataTypes.STRING,
-    projectId: DataTypes.INTEGER
+    projectId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "projects",
+        key: "id"
+      },
+      onUpdate: "CASCADE",
+      onDelete: "SET NULL",
+    }
   }, {
     sequelize,
     modelName: 'resource',

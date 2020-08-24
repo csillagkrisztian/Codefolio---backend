@@ -10,12 +10,30 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      like.belongsTo(models.project);
+      like.belongsTo(models.user);
     }
   };
   like.init({
-    projectId: DataTypes.STRING,
-    userId: DataTypes.STRING
+    projectId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "projects",
+        key: "id"
+      },
+      onUpdate: "CASCADE",
+      onDelete: "SET NULL",
+
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "users",
+        key: "id"
+      },
+      onUpdate: "CASCADE",
+      onDelete: "SET NULL",
+    }
   }, {
     sequelize,
     modelName: 'like',

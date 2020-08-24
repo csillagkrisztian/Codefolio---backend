@@ -10,12 +10,29 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      tagproject.belongsTo(models.project);
+      tagproject.belongsTo(models.tag);
     }
   };
   tagproject.init({
-    tagId: DataTypes.INTEGER,
-    projectId: DataTypes.INTEGER
+    tagId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "tag",
+        key: "id"
+      },
+      onUpdate: "CASCADE",
+      onDelete: "SET NULL",
+    },
+    projectId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "project",
+        key: "id"
+      },
+      onUpdate: "CASCADE",
+      onDelete: "SET NULL",
+    }
   }, {
     sequelize,
     modelName: 'tagproject',
