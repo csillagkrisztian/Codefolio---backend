@@ -3,6 +3,9 @@ const { toJWT } = require("../auth/jwt");
 const authMiddleware = require("../auth/middleware");
 const User = require("../models/").user;
 const Project = require("../models/").project;
+const Comment = require("../models").comment;
+const Like = require("../models").like;
+
 const router = new Router();
 
 router.get("/users/:id", async (req, res) => {
@@ -20,6 +23,13 @@ router.get("/users/:id", async (req, res) => {
       .status(400)
       .send({ message: "There is an existing account with this id" });
   }
+});
+
+router.get("/homepage", async (req, res) => {
+  const projects = await Project.findAll({
+    include: [Comment, Like],
+  });
+  return res.status(201).send(projects);
 });
 
 module.exports = router;
