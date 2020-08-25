@@ -37,22 +37,4 @@ router.get("/homepage", async (req, res) => {
   }
 });
 
-router.get("/projects/:id", async (req, res) => {
-  const project = await Project.findByPk(req.params.id, {
-    include: [Resource, Comment, Like],
-  });
-
-  try {
-    if (!project) {
-      return res
-        .status(400)
-        .send({ message: "There is an existing project with this id" });
-    }
-    const userId = project.userId;
-    const user = await User.findByPk(userId);
-    return res.status(201).send({ project, user });
-  } catch (error) {
-    return res.status(400).send({ message: "There is a problem" });
-  }
-});
 module.exports = router;
