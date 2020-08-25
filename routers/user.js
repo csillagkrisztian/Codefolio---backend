@@ -2,11 +2,11 @@ const { Router } = require("express");
 const { toJWT } = require("../auth/jwt");
 const authMiddleware = require("../auth/middleware");
 const User = require("../models/").user;
-
+const Project = require("../models/").project;
 const router = new Router();
 
 router.get("/users/:id", async (req, res) => {
-  const user = await User.findByPk(req.params.id);
+  const user = await User.findByPk(req.params.id, { include: Project });
   console.log("id of url is:", user);
   try {
     if (user === null) {
