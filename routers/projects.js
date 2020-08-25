@@ -28,4 +28,47 @@ router.get("/projects/:id", async (req, res) => {
   }
 });
 
+router.post("/newproject", authMiddleware, async (req, res) => {
+  const {
+    projectName,
+    feLink,
+    beLink,
+    projectImg,
+    ytUrl,
+    projectDesc,
+    resources,
+    tags,
+  } = req.body;
+  try {
+    if (
+      !projectName ||
+      !feLink ||
+      !beLink ||
+      !projectImg ||
+      !projectDesc ||
+      !resources ||
+      !tags
+    ) {
+      return res.status(400).send({ message: "Missing credentials!" });
+    }
+    const newProject = await Project.create({
+      projectName,
+      feLink,
+      beLink,
+      projectImg,
+      ytUrl,
+      projectDesc,
+      userId: req.user.id,
+    });
+    const newResources = resources.map(
+      async (resource) =>
+        await Resource.create({ ...resource, projectId: newProject.id })
+    );
+    await Promise.all(newResources);
+    res.send({ newProject, newResources });
+  } catch (error) {
+    return res.status(400).send({ message: "There is a problem" });
+  }
+});
+
 module.exports = router;
