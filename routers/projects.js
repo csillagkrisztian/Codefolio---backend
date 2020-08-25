@@ -6,12 +6,14 @@ const Project = require("../models/").project;
 const Comment = require("../models").comment;
 const Like = require("../models").like;
 const Resource = require("../models").resource;
+const Tag = require("../models").tag;
+const Tagproject = require("../models").tagproject;
 
 const router = new Router();
 
 router.get("/projects/:id", async (req, res) => {
   const project = await Project.findByPk(req.params.id, {
-    include: [Resource, Comment, Like],
+    include: [Resource, Comment, Like, Tag],
   });
 
   try {
@@ -39,9 +41,16 @@ router.post("/newproject", authMiddleware, async (req, res) => {
     resources,
     tags,
   } = req.body;
-  console.log("req body is here ============> ", req.body.resources);
+  console.log("req body is here ============> ", req.body.tags);
   try {
-    if (!projectName || !feLink || !beLink || !projectImg || !projectDesc) {
+    if (
+      !projectName ||
+      !feLink ||
+      !beLink ||
+      !projectImg ||
+      !projectDesc ||
+      !resources
+    ) {
       return res.status(400).send({ message: "Missing credentials!" });
     }
 
@@ -55,15 +64,37 @@ router.post("/newproject", authMiddleware, async (req, res) => {
       userId: req.user.id,
     });
     const test = JSON.parse(resources);
-    console.log(test);
+    console.log(test, newProject.id);
     const newResources = test.map(
       async (resource) =>
         await Resource.create({ ...resource, projectId: newProject.id })
     );
-    await Promise.all(newResources);
-    res.send({ newProject, newResources });
+    const test1 = JSON.parse(tags);
+
+    const newTag = test1.map(async (tag) => {
+      if (!tag.id) {
+        return await Tag.create({ ...tag }).then((newtag) =>
+          Tagproject.create({
+            ...tag,
+            tagId: newtag.id,
+            projectId: newProject.id,
+          })
+        );
+      } else {
+        return await Tagproject.create({ ...tag, projectId: newProject.id });
+      }
+    });
+    const newTags = await Promise.all(newTags);
+    await Promise.all(newResources).then((newResources) =>
+      res.status(201).send({ newProject, newResources, newTags })
+    );
   } catch (error) {
     return res.status(400).send({ message: "There is a problem" });
   }
+});
+
+router.get("/tags", async (req, res) => {
+  const tags = await Tag.findAll();
+  return res.status(201).send(tags);
 });
 module.exports = router;
