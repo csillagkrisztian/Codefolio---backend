@@ -5,6 +5,8 @@ const User = require("../models/").user;
 const Project = require("../models/").project;
 const Comment = require("../models").comment;
 const Like = require("../models").like;
+const Tag = require("../models").tag;
+
 const Resource = require("../models").resource;
 
 const router = new Router();
@@ -28,7 +30,7 @@ router.get("/users/:id", async (req, res) => {
 
 router.get("/homepage", async (req, res) => {
   const projects = await Project.findAll({
-    include: [Comment, Like],
+    include: [Comment, Like, Tag],
   });
   try {
     return res.status(201).send(projects);
