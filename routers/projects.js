@@ -93,4 +93,8 @@ router.post("/newproject", authMiddleware, async (req, res) => {
   }
 });
 
+router.get("/tags", async (req, res) => {
+  const tags = await Tag.findAll();
+  return res.status(201).send(tags);
+});
 module.exports = router;
