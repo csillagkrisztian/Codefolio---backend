@@ -1,10 +1,12 @@
+require("dotenv").config();
 const express = require("express");
 const loggerMiddleWare = require("morgan");
 const corsMiddleWare = require("cors");
 const { PORT } = require("./config/constants");
 const authRouter = require("./routers/auth");
 const authMiddleWare = require("./auth/middleware");
-
+const userRouter = require("./routers/user");
+const projectRouter = require("./routers/projects");
 const app = express();
 
 /**
@@ -151,6 +153,8 @@ app.post("/authorized_post_request", authMiddleWare, (req, res) => {
 });
 
 app.use("/", authRouter);
+app.use("/", userRouter);
+app.use("/", projectRouter);
 
 // Listen for connections on specified port (default is port 4000)
 
