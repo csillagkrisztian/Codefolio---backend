@@ -8,7 +8,8 @@ const authMiddleWare = require("./auth/middleware");
 const userRouter = require("./routers/user");
 const projectRouter = require("./routers/projects");
 const app = express();
-
+const http = require("http").createServer(app);
+const io = require("socket.io")(http);
 /**
  * Middlewares
  *
@@ -114,43 +115,20 @@ if (process.env.DELAY) {
  * GET /me
  *
  */
-
+/**
+ * Socket.io
+ *
+ */
+io.on("connection", (socket) => {
+  socket.on("message", ({ name, message }) => {
+    io.emit("message", { name, message });
+  });
+});
 /**
  * Routes
  *
  * Define your routes here (now that middlewares are configured)
  */
-
-// GET endpoint for testing purposes, can be removed
-app.get("/", (req, res) => {
-  res.send("Hi from express");
-});
-
-// POST endpoint for testing purposes, can be removed
-app.post("/echo", (req, res) => {
-  res.json({
-    youPosted: {
-      ...req.body,
-    },
-  });
-});
-
-// POST endpoint which requires a token for testing purposes, can be removed
-app.post("/authorized_post_request", authMiddleWare, (req, res) => {
-  // accessing user that was added to req by the auth middleware
-  const user = req.user;
-  // don't send back the password hash
-  delete user.dataValues["password"];
-
-  res.json({
-    youPosted: {
-      ...req.body,
-    },
-    userFoundWithToken: {
-      ...user.dataValues,
-    },
-  });
-});
 
 app.use("/", authRouter);
 app.use("/", userRouter);
@@ -158,6 +136,6 @@ app.use("/", projectRouter);
 
 // Listen for connections on specified port (default is port 4000)
 
-app.listen(PORT, () => {
+http.listen(PORT, () => {
   console.log(`Listening on port: ${PORT}`);
 });
