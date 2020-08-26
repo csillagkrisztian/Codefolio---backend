@@ -2,6 +2,7 @@ const { Router } = require("express");
 const { toJWT } = require("../auth/jwt");
 const authMiddleware = require("../auth/middleware");
 const User = require("../models/").user;
+const Tag = require("../models/").tag;
 const Project = require("../models/").project;
 const Comment = require("../models").comment;
 const Like = require("../models").like;
@@ -11,7 +12,7 @@ const router = new Router();
 
 router.get("/projects/:id", async (req, res) => {
   const project = await Project.findByPk(req.params.id, {
-    include: [Resource, Comment, Like],
+    include: [Resource, Comment, Like, Tag],
   });
 
   try {
