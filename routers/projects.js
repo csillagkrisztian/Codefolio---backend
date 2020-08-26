@@ -63,14 +63,17 @@ router.post("/newproject", authMiddleware, async (req, res) => {
       projectDesc,
       userId: req.user.id,
     });
-
-    const newResources = reasources.map(
+console.log(resources, newProject.id);
+    const newResources = resources.map(
       async (resource) =>
         await Resource.create({ ...resource, projectId: newProject.id })
     );
+    // const test1 = JSON.parse(tags);
 
     const newTag = tags.map(async (tag) => {
-      if (!tag.id) {
+      const tagName = await Tag.findOne({ where: { tagName: tag.tagName } });
+      console.log("=============>tagName", tagName);
+      if (!tagName) {
         return await Tag.create({ ...tag }).then((newtag) =>
           Tagproject.create({
             ...tag,
@@ -79,7 +82,10 @@ router.post("/newproject", authMiddleware, async (req, res) => {
           })
         );
       } else {
-        return await Tagproject.create({ ...tag, projectId: newProject.id });
+        return await Tagproject.create({
+          tagId: tagName.id,
+          projectId: newProject.id,
+        });
       }
     });
     const newTags = await Promise.all(newTag);
@@ -131,6 +137,14 @@ router.post("/projects/:id/like", authMiddleware, async (req, res, next) => {
   } catch (error) {
     return res.status(400).send({ message: "There is a problem", error });
   }
+});
+
+router.get("/projects/tags/:id", async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+  const projects = await Tagproject.findAll({ where: { tagId: id } });
+
+  return res.status(201).send(projects);
 });
 
 module.exports = router;
