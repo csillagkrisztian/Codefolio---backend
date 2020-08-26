@@ -63,8 +63,7 @@ router.post("/newproject", authMiddleware, async (req, res) => {
       projectDesc,
       userId: req.user.id,
     });
-    // const test = JSON.parse(resources);
-    console.log(resources, newProject.id);
+console.log(resources, newProject.id);
     const newResources = resources.map(
       async (resource) =>
         await Resource.create({ ...resource, projectId: newProject.id })
