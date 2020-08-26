@@ -41,7 +41,7 @@ router.post("/newproject", authMiddleware, async (req, res) => {
     resources,
     tags,
   } = req.body;
-  console.log("req body is here ============> ", req.body.tags);
+  console.log("req body is here ============> ", req.body);
   try {
     if (
       !projectName ||
@@ -63,16 +63,18 @@ router.post("/newproject", authMiddleware, async (req, res) => {
       projectDesc,
       userId: req.user.id,
     });
-    const test = JSON.parse(resources);
-    console.log(test, newProject.id);
-    const newResources = test.map(
+    // const test = JSON.parse(resources);
+    console.log(resources, newProject.id);
+    const newResources = resources.map(
       async (resource) =>
         await Resource.create({ ...resource, projectId: newProject.id })
     );
-    const test1 = JSON.parse(tags);
+    // const test1 = JSON.parse(tags);
 
-    const newTag = test1.map(async (tag) => {
-      if (!tag.id) {
+    const newTag = tags.map(async (tag) => {
+      const tagName = await Tag.findOne({ where: { tagName: tag.tagName } });
+      console.log("=============>tagName", tagName);
+      if (!tagName) {
         return await Tag.create({ ...tag }).then((newtag) =>
           Tagproject.create({
             ...tag,
@@ -81,7 +83,10 @@ router.post("/newproject", authMiddleware, async (req, res) => {
           })
         );
       } else {
-        return await Tagproject.create({ ...tag, projectId: newProject.id });
+        return await Tagproject.create({
+          tagId: tagName.id,
+          projectId: newProject.id,
+        });
       }
     });
     const newTags = await Promise.all(newTag);
@@ -135,9 +140,11 @@ router.post("/projects/:id/like", authMiddleware, async (req, res, next) => {
   }
 });
 
-router.get("/project/tags/:id", async (req, res) => {
+router.get("/projects/tags/:id", async (req, res) => {
   const { id } = req.params;
+  console.log(id);
   const projects = await Tagproject.findAll({ where: { tagId: id } });
+
   return res.status(201).send(projects);
 });
 
