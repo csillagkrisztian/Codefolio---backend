@@ -84,7 +84,7 @@ router.post("/newproject", authMiddleware, async (req, res) => {
         return await Tagproject.create({ ...tag, projectId: newProject.id });
       }
     });
-    const newTags = await Promise.all(newTags);
+    const newTags = await Promise.all(newTag);
     await Promise.all(newResources).then((newResources) =>
       res.status(201).send({ newProject, newResources, newTags })
     );
