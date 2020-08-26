@@ -97,4 +97,42 @@ router.get("/tags", async (req, res) => {
   const tags = await Tag.findAll();
   return res.status(201).send(tags);
 });
+
+router.post("/projects/:id/comment", authMiddleware, async (req, res) => {
+  const { comment } = req.body;
+  const { id } = req.params;
+
+  try {
+    const newComment = await Comment.create({
+      comment,
+      projectId: id,
+      userId: req.user.id,
+    });
+    return res.status(201).send(newComment);
+  } catch (error) {
+    return res.status(400).send({ message: "There is a problem", error });
+  }
+});
+
+router.post("/projects/:id/like", authMiddleware, async (req, res, next) => {
+  const { id } = req.params;
+  const like = await Like.findOne({
+    where: { userId: req.user.id, projectId: id },
+  });
+  try {
+    if (!like) {
+      const newLike = await Like.create({
+        projectId: id,
+        userId: req.user.id,
+      });
+      return res.status(201).send(newLike);
+    } else {
+      const deleteLike = await like.destroy();
+      return res.status(201).send(deleteLike);
+    }
+  } catch (error) {
+    return res.status(400).send({ message: "There is a problem", error });
+  }
+});
+
 module.exports = router;
