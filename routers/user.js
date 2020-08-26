@@ -39,4 +39,40 @@ router.get("/homepage", async (req, res) => {
   }
 });
 
+router.patch("/users/:id", authMiddleware, async (req, res) => {
+  const { email, password, name, githubLink, linkedinLink, userImg } = req.body;
+  const { id } = req.params;
+  try {
+    if (
+      !email ||
+      !password ||
+      !name ||
+      !githubLink ||
+      !userImg ||
+      !linkedinLink
+    ) {
+      return res.status(400).send("Please send all imformation");
+    }
+
+    const user = await User.findOne({ where: { email: email } });
+    console.log("user=========>", user, id);
+    if (user.id == id) {
+      const newUser = await user.update({
+        email: email,
+        password,
+        name,
+        githubLink,
+        linkedinLink,
+        userImg,
+      });
+      delete newUser.dataValues["password"];
+
+      return res.status(200).send({ ...newUser.dataValues });
+    }
+    return res.status(400).send({ message: "userId doesn't match with email" });
+  } catch (error) {
+    return res.status(400).send({ message: "There is a problem", error });
+  }
+});
+
 module.exports = router;
