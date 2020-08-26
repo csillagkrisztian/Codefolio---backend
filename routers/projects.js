@@ -135,4 +135,10 @@ router.post("/projects/:id/like", authMiddleware, async (req, res, next) => {
   }
 });
 
+router.get("/project/tags/:id", async (req, res) => {
+  const { id } = req.params;
+  const projects = await Tagproject.findAll({ where: { tagId: id } });
+  return res.status(201).send(projects);
+});
+
 module.exports = router;
