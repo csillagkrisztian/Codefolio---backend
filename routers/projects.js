@@ -41,7 +41,7 @@ router.post("/newproject", authMiddleware, async (req, res) => {
     resources,
     tags,
   } = req.body;
-  console.log("req body is here ============> ", req.body.tags);
+  console.log("req body is here ============> ", req.body);
   try {
     if (
       !projectName ||
@@ -63,15 +63,13 @@ router.post("/newproject", authMiddleware, async (req, res) => {
       projectDesc,
       userId: req.user.id,
     });
-    const test = JSON.parse(resources);
-    console.log(test, newProject.id);
-    const newResources = test.map(
+
+    const newResources = reasources.map(
       async (resource) =>
         await Resource.create({ ...resource, projectId: newProject.id })
     );
-    const test1 = JSON.parse(tags);
 
-    const newTag = test1.map(async (tag) => {
+    const newTag = tags.map(async (tag) => {
       if (!tag.id) {
         return await Tag.create({ ...tag }).then((newtag) =>
           Tagproject.create({
