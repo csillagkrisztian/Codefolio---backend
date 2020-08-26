@@ -120,7 +120,9 @@ if (process.env.DELAY) {
  *
  */
 io.on("connection", (socket) => {
+  console.log("connected!");
   socket.on("message", ({ name, message }) => {
+    console.log({ name, message });
     io.emit("message", { name, message });
   });
 });
