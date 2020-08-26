@@ -2,7 +2,6 @@ const { Router } = require("express");
 const { toJWT } = require("../auth/jwt");
 const authMiddleware = require("../auth/middleware");
 const User = require("../models/").user;
-const Tag = require("../models/").tag;
 const Project = require("../models/").project;
 const Comment = require("../models").comment;
 const Like = require("../models").like;
@@ -85,7 +84,7 @@ router.post("/newproject", authMiddleware, async (req, res) => {
         return await Tagproject.create({ ...tag, projectId: newProject.id });
       }
     });
-    const newTags = await Promise.all(newTags);
+    const newTags = await Promise.all(newTag);
     await Promise.all(newResources).then((newResources) =>
       res.status(201).send({ newProject, newResources, newTags })
     );
