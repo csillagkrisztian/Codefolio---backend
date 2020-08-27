@@ -13,7 +13,7 @@ const router = new Router();
 
 router.get("/projects/:id", async (req, res) => {
   const project = await Project.findByPk(req.params.id, {
-    include: [Resource, Comment, Like, Tag],
+    include: [Resource, { model: Comment, include: [User] }, Like, Tag],
   });
 
   try {
@@ -24,6 +24,7 @@ router.get("/projects/:id", async (req, res) => {
     }
     const userId = project.userId;
     const user = await User.findByPk(userId);
+    console.log(project);
     return res.status(201).send({ project, user });
   } catch (error) {
     return res.status(400).send({ message: "There is a problem" });
@@ -63,7 +64,7 @@ router.post("/newproject", authMiddleware, async (req, res) => {
       projectDesc,
       userId: req.user.id,
     });
-console.log(resources, newProject.id);
+    console.log(resources, newProject.id);
     const newResources = resources.map(
       async (resource) =>
         await Resource.create({ ...resource, projectId: newProject.id })
