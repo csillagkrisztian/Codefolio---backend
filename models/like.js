@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class like extends Model {
     /**
@@ -13,30 +11,34 @@ module.exports = (sequelize, DataTypes) => {
       like.belongsTo(models.project);
       like.belongsTo(models.user);
     }
-  };
-  like.init({
-    projectId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: "projects",
-        key: "id"
+  }
+  like.init(
+    {
+      projectId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "projects",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL",
       },
-      onUpdate: "CASCADE",
-      onDelete: "SET NULL",
-
+      userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "users",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL",
+      },
     },
-    userId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: "users",
-        key: "id"
-      },
-      onUpdate: "CASCADE",
-      onDelete: "SET NULL",
+    {
+      sequelize,
+      modelName: "like",
     }
-  }, {
-    sequelize,
-    modelName: 'like',
-  });
+  );
   return like;
 };

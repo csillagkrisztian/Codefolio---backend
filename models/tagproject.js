@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class tagproject extends Model {
     /**
@@ -13,29 +11,34 @@ module.exports = (sequelize, DataTypes) => {
       tagproject.belongsTo(models.project);
       tagproject.belongsTo(models.tag);
     }
-  };
-  tagproject.init({
-    tagId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: "tag",
-        key: "id"
+  }
+  tagproject.init(
+    {
+      tagId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "tag",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL",
       },
-      onUpdate: "CASCADE",
-      onDelete: "SET NULL",
+      projectId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "project",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL",
+      },
     },
-    projectId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: "project",
-        key: "id"
-      },
-      onUpdate: "CASCADE",
-      onDelete: "SET NULL",
+    {
+      sequelize,
+      modelName: "tagproject",
     }
-  }, {
-    sequelize,
-    modelName: 'tagproject',
-  });
+  );
   return tagproject;
 };
