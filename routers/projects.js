@@ -24,7 +24,7 @@ router.get("/projects/:id", async (req, res) => {
     }
     const userId = project.userId;
     const user = await User.findByPk(userId);
-    console.log(project);
+
     return res.status(201).send({ project, user });
   } catch (error) {
     return res.status(400).send({ message: "There is a problem" });
@@ -113,7 +113,11 @@ router.post("/projects/:id/comment", authMiddleware, async (req, res) => {
       projectId: id,
       userId: req.user.id,
     });
-    return res.status(201).send(newComment);
+    const finalComment = await Comment.findByPk(newComment.id, {
+      include: [User],
+    });
+
+    return res.status(201).send(finalComment);
   } catch (error) {
     return res.status(400).send({ message: "There is a problem", error });
   }
