@@ -17,12 +17,12 @@ module.exports = {
           updatedAt: new Date(),
         },
         {
-          tagName: "react Native",
+          tagName: "reactnative",
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
-          tagName: "Axios",
+          tagName: "axios",
           createdAt: new Date(),
           updatedAt: new Date(),
         },

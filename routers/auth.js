@@ -36,14 +36,23 @@ router.post("/login", async (req, res, next) => {
 });
 
 router.post("/signup", async (req, res) => {
-  const { email, password, name, githubLink, linkedinLink, userImg } = req.body;
+  const {
+    email,
+    password,
+    name,
+    githubLink,
+    linkedinLink,
+    userImg,
+    motto,
+  } = req.body;
   if (
     !email ||
     !password ||
     !name ||
     !githubLink ||
     !userImg ||
-    !linkedinLink
+    !linkedinLink ||
+    !motto
   ) {
     return res.status(400).send("Please fill the form completely");
   }
@@ -56,6 +65,7 @@ router.post("/signup", async (req, res) => {
       githubLink,
       linkedinLink,
       userImg,
+      motto,
     });
 
     delete newUser.dataValues["password"]; // don't send back the password hash

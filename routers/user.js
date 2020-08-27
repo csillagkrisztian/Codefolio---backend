@@ -40,7 +40,15 @@ router.get("/homepage", async (req, res) => {
 });
 
 router.patch("/users/:id", authMiddleware, async (req, res) => {
-  const { email, password, name, githubLink, linkedinLink, userImg } = req.body;
+  const {
+    email,
+    password,
+    name,
+    githubLink,
+    linkedinLink,
+    userImg,
+    motto,
+  } = req.body;
   const { id } = req.params;
   try {
     if (
@@ -49,9 +57,10 @@ router.patch("/users/:id", authMiddleware, async (req, res) => {
       !name ||
       !githubLink ||
       !userImg ||
-      !linkedinLink
+      !linkedinLink ||
+      !motto
     ) {
-      return res.status(400).send("Please send all imformation");
+      return res.status(400).send("Please send all information");
     }
 
     const user = await User.findOne({ where: { email: email } });
@@ -64,6 +73,7 @@ router.patch("/users/:id", authMiddleware, async (req, res) => {
         githubLink,
         linkedinLink,
         userImg,
+        motto,
       });
       delete newUser.dataValues["password"];
 
