@@ -1,42 +1,44 @@
-'use strict';
+"use strict";
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('tagprojects', {
+    await queryInterface.createTable("tagprojects", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       tagId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: "tags",
-          key: "id"
+          key: "id",
         },
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
       projectId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: "projects",
-          key: "id"
+          key: "id",
         },
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('tagprojects');
-  }
+    await queryInterface.dropTable("tagprojects");
+  },
 };

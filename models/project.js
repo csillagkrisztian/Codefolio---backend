@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class project extends Model {
     /**
@@ -19,26 +17,47 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "projectId",
       });
     }
-  };
-  project.init({
-    projectName: DataTypes.STRING,
-    feLink: DataTypes.STRING,
-    beLink: DataTypes.STRING,
-    projectImg: DataTypes.STRING,
-    ytUrl: DataTypes.STRING,
-    projectDesc: DataTypes.STRING,
-    userId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: "users",
-        key: "id"
+  }
+  project.init(
+    {
+      projectName: {
+        type: DataTypes.STRING,
+        allowNull: false,
       },
-      onUpdate: "CASCADE",
-      onDelete: "SET NULL",
+      feLink: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      beLink: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      projectImg: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      ytUrl: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      projectDesc: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      userId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: "users",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL",
+      },
+    },
+    {
+      sequelize,
+      modelName: "project",
     }
-  }, {
-    sequelize,
-    modelName: 'project',
-  });
+  );
   return project;
 };

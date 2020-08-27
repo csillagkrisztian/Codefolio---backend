@@ -10,15 +10,19 @@ module.exports = {
       },
       title: {
         type: Sequelize.STRING,
+        allowNull: false,
       },
       link: {
         type: Sequelize.TEXT,
+        allowNull: false,
       },
       resourceImg: {
         type: Sequelize.TEXT,
+        allowNull: false,
       },
       resourceDes: {
         type: Sequelize.TEXT,
+        allowNull: false,
       },
       projectId: {
         type: Sequelize.INTEGER,
