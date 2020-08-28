@@ -120,10 +120,22 @@ if (process.env.DELAY) {
  *
  */
 io.on("connection", (socket) => {
+  const admin = {
+    adminName: ".codeFolioBot",
+    adminMessage: "Welcome to the .codeFolio chatbox! Say hello to everyone!",
+    adminImage:
+      "https://static.vecteezy.com/system/resources/previews/000/692/252/original/retro-robot-vector-illustration.jpg",
+  };
+  const { adminName, adminMessage, adminImage } = admin;
+  socket.emit("message", {
+    name: adminName,
+    message: adminMessage,
+    image: adminImage,
+  });
   console.log("connected!");
-  socket.on("message", ({ name, message }) => {
-    console.log({ name, message });
-    io.emit("message", { name, message });
+  socket.on("message", ({ name, message, image }) => {
+    console.log({ name, message, image });
+    io.emit("message", { name, message, image });
   });
 });
 /**
