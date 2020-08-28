@@ -40,41 +40,12 @@ router.get("/homepage", async (req, res) => {
 });
 
 router.patch("/users/:id", authMiddleware, async (req, res) => {
-  const {
-    email,
-    password,
-    name,
-    githubLink,
-    linkedinLink,
-    userImg,
-    motto,
-  } = req.body;
   const { id } = req.params;
   try {
-    if (
-      !email ||
-      !password ||
-      !name ||
-      !githubLink ||
-      !userImg ||
-      !linkedinLink ||
-      !motto
-    ) {
-      return res.status(400).send("Please send all information");
-    }
-
-    const user = await User.findOne({ where: { email: email } });
+    const user = await User.findByPk(id);
     console.log("user=========>", user, id);
     if (user.id == id) {
-      const newUser = await user.update({
-        email: email,
-        password,
-        name,
-        githubLink,
-        linkedinLink,
-        userImg,
-        motto,
-      });
+      const newUser = await user.update(req.body);
       delete newUser.dataValues["password"];
 
       return res.status(200).send({ ...newUser.dataValues });
